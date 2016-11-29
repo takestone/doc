@@ -1,0 +1,69 @@
+===========mysql problem===========
+index : 
+
+
+/*step1: 安装*/
+
+卸载安装mysql
+
+//查看是否安装mysql
+
+[root@stone ~]# rpm -qa|grep -i mysql	
+
+//删除mysql
+
+[root@stone ~]# rpm -e --nodeps mysql-libs-5.1.71-1.el6.i686 
+
+// 删除命令：
+rpm -e --nodeps 包名 ( rpm -ev mysql-4.1.12-3.RHEL4.1 )
+
+//删除mysql配置
+//删除老版本mysql的开发头文件和库 命令：
+ rm -fr /usr/lib/mysql
+ rm -fr /usr/include/mysql
+	
+ rm -f /etc/my.cnf
+ rm -rf /var/lib/mysql
+
+/*step2: 下载mysql相关安装包并安装*/
+
+MySQL-server-5.6.34-1.linux_glibc2.5.i386.rpm  
+MySQL-client-5.6.34-1.linux_glibc2.5.i386.rpm
+MySQL-devel-5.6.34-1.linux_glibc2.5.i386.rpm
+
+//安装server后，查看随机生成密码 cat /root/.mysql_secret
+
+//查看mysql是否启动
+
+ps -ef|grep mysqld
+
+//设置mysql 用户密码
+mysql> updaste user set password=password('123456') where user='root';
+mysql> flush privileges;
+
+
+/*step3： 修改mysql 字符集utf8*/
+
+查看字符集
+mysql> show variables like 'character%';
+
+添加/etc/my.cnf 并修改如下
+
+[mysqld]
+
+init_connect='SET NAMESutf8'
+character-set-server = utf8
+collation-server=utf8_general_ci
+
+/etc/init.d/mysql start (stop) 为启动和停止服务器 或 service mysql start
+
+
+[client]部分加入：
+default-character-set=utf8
+[mysqld]部分加入：
+character-set-server=utf8
+
+
+
+
+
